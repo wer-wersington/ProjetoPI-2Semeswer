@@ -1,4 +1,4 @@
-
+<%@page import="model.GeneroFilme"%>
 <%@page import="model.Filme"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -13,7 +13,9 @@
     int classificacao = 0;
     String avaliacaoStr = request.getParameter("avaliacao");
     double avaliacao = 0.0;
-
+    String genreoStr = request.getParameter("categoria");
+    int categoria;
+    
     // Inicializando o objeto filme
     Filme film = new Filme();
         
@@ -55,8 +57,29 @@
             }
             film.classificacao = classificacao;
         }
-       
         film.incluirFilme();
+        
+        GeneroFilme genf = new GeneroFilme();
+        
+        if(genreoStr != null && !genreoStr.trim().isEmpty()){
+             if (genreoStr.equals("Ação")) {
+                genf.idGenero = 1;
+            }else if(genreoStr.equals("Comédia")){
+                genf.idGenero = 2;
+            }else if(genreoStr.equals("Românce")){
+                genf.idGenero = 3;
+            }else if(genreoStr.equals("Aventura")){
+                genf.idGenero = 4;
+            }else if(genreoStr.equals("Ficção")){
+                genf.idGenero = 5;
+            }else if(genreoStr.equals("Desenho")){
+                genf.idGenero = 6;
+            } 
+            
+            genf.idFilme = genf.buscarUltimoFilme();
+            
+    }
+        
     }
 %>
 
@@ -131,17 +154,18 @@
                             <div class="div_list_inputs">
                                 <div class="input_div_grid">
                                     <label>Nome</label>
-                                    <label class="input_capas"> <input type="text" class=" principal" name="nome"></label>
+                                    <label class="input_capas"> <input type="text" class=" principal" name="nome" required></label>
                                 </div>
                                 <div class="input_div_grid">
                                     <label>Categoria</label>
                                     <label class="input_capas"> <input list="cat" class=" principal" name="categoria">
-                                        <datalist id="cat">
+                                        <datalist id="cat"> 
                                             <option value="Românce">
                                             <option value="Ação">
                                             <option value="Aventura">
                                             <option value="Desenho">
                                             <option value="Ficção">
+                                            <option value="Comédia">
                                         </datalist></label>
                                 </div>
                                 <div class="input_div_grid">
@@ -229,7 +253,7 @@
                     Cancelar
                 </button>
 
-                <button class="add_btn" >
+                <button class="add_btn">
                     <i class="fa-solid fa-plus"></i>
                     Adicionar
                 </button>

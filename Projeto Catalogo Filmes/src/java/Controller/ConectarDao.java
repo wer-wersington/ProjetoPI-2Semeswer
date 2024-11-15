@@ -18,7 +18,9 @@ public class ConectarDao {
     public String htmlError = null;
     public ResultSet tab = null;
     public String MeuBanco = "catalogofilms";
-    public String statusSQL; /* Na variável statusSQl conterá null quando não tiver erros
+    public String statusSQL; 
+    public int gravado = 0;
+    /* Na variável statusSQl conterá null quando não tiver erros
 Mas quando haver erros conterá a mensagem de erro capturada
 Pela excessão da clausula try. */
 
@@ -94,7 +96,7 @@ Pela excessão da clausula try. */
 
                     sql = "CREATE TABLE IF NOT EXISTS TB_GENERO ("
                     + "ID_GENERO INT NOT NULL AUTO_INCREMENT,"
-                    + "NM_GENERO VARCHAR(200) NOT NULL,"
+                    + "NM_GENERO VARCHAR(200) UNIQUE NOT NULL,"
                     + "primary key (ID_GENERO)"
                     + ");";
 
@@ -140,13 +142,25 @@ Pela excessão da clausula try. */
             ps.executeUpdate();// Executa o comando SQL
             
             sql = "INSERT INTO TB_USUARIO (NM_USUARIO, DS_EMAIL, DS_SENHA)SELECT 'admin', 'admin', '1234'WHERE NOT EXISTS (SELECT 1 FROM TB_USUARIO WHERE DS_EMAIL = 'admin');";
-
             ps = con.prepareStatement(sql); // prepara o objeto que irá executar o comando SQL
             ps.executeUpdate();// Executa o comando SQL
+            sql = "INSERT INTO TB_GENERO (NM_GENERO) VALUE('ACAO'),('COMEDIA'),('ROMANCE'),('AVENTURA'),('DESENHO'),('FICCAO');";
+            ps = con.prepareStatement(sql); // prepara o objeto que irá executar o comando SQL
+            ps.executeUpdate();// Executa o comando SQL
+
+
         } catch (SQLException err) {
             htmlError = err.getMessage();
         }
-    }
+        
 
+        
+        
+    }
+        public void inserirtudo() throws SQLException{
+            ps = con.prepareStatement("use CATALOGOFILMS");
+            ps.executeUpdate();
+            
+        }
 }
 
